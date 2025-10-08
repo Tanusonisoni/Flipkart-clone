@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome to login page</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <div class="header">
+    <div id="Flipkart">
+      <span class="fk-logo">Flipkart</span>
+      <span class="fk-explore">Explore</span>
+      <span class="fk-plus">plus</span>
+    </div>
+
+    <div class="input">
+      <span class="search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="text" placeholder="Search for products, brands and more">
+      </span>
+    </div>
+    
+    <div class="menus">
+    <a href="login.html"><button class="btn"><i class="fa-regular fa-circle-user"></i>Login</button></a>
+    <a href="https://www.flipkart.com/viewcart?marketplace=FLIPKART"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+    <a href="https://seller.flipkart.com/sell-online?utm_source=fkwebsite&utm_medium=websitedirect"><i class="fa-solid fa-shop"></i> Become a Seller</a>
+    </div>
+    </div>
+    <div class="container">
+        <div class="form-box active" id="login-form">
+            <form action="/submit" method="post">
+            <h2>Login</h2>
+            <input type="email" name="email" placeholder="Email"required>
+            <input type="password" name="password" placeholder="Password"required>
+            <button type="submit" name="login">Login</button>
+            <p>Don't have an account?<a href="#"onclick="showForm('Register-form')">Register</a></p>
+            </form>
+        </div>
+
+         <div class="form-box" id="Register-form">
+            <form action="/submit" method="post">
+            <h2>Register</h2>
+            <input type="text" name="name" placeholder="Name"required>
+            <input type="text" name="email" placeholder="Email"required>
+            <input type="password" name="password" placeholder="Password"required>
+            <select name="role" required>
+                <option value="">--select role--</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+            <button type="submit" name="register">Register</button>
+            <p>Already have an account?<a href="#"onclick="showForm('login-form')">login</a></p>
+            </form>
+        </div>
+    </div>
+    <script src="app2.js"></script>
+</body>
+</html>

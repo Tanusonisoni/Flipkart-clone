@@ -1,0 +1,405 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+
+  <button id="bag">Go to cart
+    <i class="fa-solid fa-bag-shopping"></i>
+  </button>
+  <h1>Your Shopping Cart</h1>
+  <div id="cart-items" class="cart-container"></div>
+    <button class="total">Total</button>
+
+  <script>
+    // Get cart items
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartContainer = document.getElementById('cart-items');
+    const totalElement = document.getElementById('total');
+
+    if (cart.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      let total = 0;
+      cart.forEach(item => {
+        total += parseFloat(item.price);
+        cartContainer.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" width="100">
+            <h3>${item.name}</h3>
+            <p>₹${item.price}</p>
+          </div>
+        `;
+      });
+      totalElement.textContent = `Total: ₹${total}`;
+    }
+  </script>
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart | Flipkart Clone</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background-color: #f1f3f6;
+    }
+
+    .header {
+      background-color: #2874f0;
+      padding: 15px 20px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h2 {
+      font-weight: 600;
+    }
+
+    .cart-container {
+      width: 90%;
+      margin: 30px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .cart-item {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .item-details {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .item-details img {
+      width: 100px;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .item-info h4 {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .item-info p {
+      color: gray;
+      font-size: 15px;
+    }
+
+    button {
+      background-color: #2874f0;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #0f5bd4;
+    }
+
+    /* Try-on Modal */
+    #tryon-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .tryon-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 350px;
+      position: relative;
+    }
+
+    .tryon-area {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    #userPreview {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    #dressOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0.8;
+      cursor: move;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .close-btn {
+      background-color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Your Cart</h2>
+    <a href="index.html" style="color:white; text-decoration:none;">Continue Shopping</a>
+  </div>
+
+  <div class="cart-container" id="cartItems"></div>
+
+   Try-on Modal -->
+  <!-- <div id="tryon-modal"> 
+    <div class="tryon-box">
+      <h3>Virtual Try-On</h3>
+      <p>Upload your photo to see yourself in this dress</p>
+      <input type="file" id="userImage" accept="image/*" />
+      <div class="tryon-area">
+        <img id="userPreview" src="" alt="" />
+        <img id="dressOverlay" src="" alt="" />
+      </div>
+      <button class="close-btn" onclick="closeTryOn()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const cartItems = [
+      { id: 1, name: "Red Party Dress", price: "₹1,299", image: "images/red_dress.png" },
+      { id: 2, name: "Blue Summer Dress", price: "₹999", image: "images/blue_dress.png" },
+      { id: 3, name: "Elegant Black Gown", price: "₹2,499", image: "images/black_gown.png" }
+    ];
+
+    const cartContainer = document.getElementById("cartItems");
+    const modal = document.getElementById("tryon-modal");
+    const userImageInput = document.getElementById("userImage");
+    const userPreview = document.getElementById("userPreview");
+    const dressOverlay = document.getElementById("dressOverlay");
+
+    // Load cart
+    cartItems.forEach(item => {
+      const div = document.createElement("div");
+      div.classList.add("cart-item");
+      div.innerHTML = `
+        <div class="item-details">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="item-info">
+            <h4>${item.name}</h4>
+            <p>${item.price}</p>
+          </div>
+        </div>
+        <button onclick="openTryOn('${item.image}')">Virtual Try-On</button>
+      `;
+      cartContainer.appendChild(div);
+    });
+
+    function openTryOn(dressImage) {
+      modal.style.display = "flex";
+      userPreview.src = "";
+      dressOverlay.src = dressImage;
+      dressOverlay.style.display = "none";
+
+      userImageInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            userPreview.src = ev.target.result;
+            dressOverlay.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      // Enable drag for the dress overlay
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      dressOverlay.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.offsetX;
+        offsetY = e.offsetY;
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+          const rect = userPreview.getBoundingClientRect();
+          dressOverlay.style.left = (e.clientX - rect.left - offsetX) + "px";
+          dressOverlay.style.top = (e.clientY - rect.top - offsetY) + "px";
+        }
+      });
+
+      document.addEventListener("mouseup", () => (isDragging = false));
+    }
+
+    function closeTryOn() {
+      modal.style.display = "none";
+    }
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Try-On (Cart)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .cart-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .cart-item {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      width: 200px;
+      text-align: center;
+    }
+
+    #canvasWrapper {
+      margin-top: 20px;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      width: 300px;
+      height: 450px;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Your Cart - Virtual Try-On</h2>
+
+  <!-- User uploads their image -->
+  <p><strong>Upload your photo:</strong></p>
+  <input type="file" id="userImage" accept="image/*">
+  <br><br>
+
+  <!-- Cart items (dresses) -->
+  <div class="cart-container">
+    <div class="cart-item">
+      <img src="dress1.png" width="100"><br>
+      <p>Red Dress</p>
+      <button onclick="tryOn('dress1.png')">Try On</button>
+    </div>
+
+    <div class="cart-item">
+      <img src="dress2.png" width="100"><br>
+      <p>Blue Dress</p>
+      <button onclick="tryOn('dress2.png')">Try On</button>
+    </div>
+  </div>
+
+  <!-- Canvas for displaying try-on -->
+  <div id="canvasWrapper">
+    <canvas id="tryOnCanvas" width="300" height="450"></canvas>
+  </div>
+
+  <script>
+    const userInput = document.getElementById('userImage');
+    const canvas = document.getElementById('tryOnCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let userImg = new Image();
+    let dressImg = new Image();
+
+    let userImageLoaded = false;
+
+    // When user uploads image
+    userInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        userImg.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Draw user image when loaded
+    userImg.onload = () => {
+      userImageLoaded = true;
+      drawUserImage();
+    };
+
+    function drawUserImage() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(userImg, 0, 0, canvas.width, canvas.height);
+    }
+
+    // Function called when user clicks "Try On"
+    function tryOn(dressSrc) {
+      if (!userImageLoaded) {
+        alert("Please upload your photo first!");
+        return;
+      }
+
+      dressImg.src = dressSrc;
+
+      dressImg.onload = () => {
+        // First draw user image
+        drawUserImage();
+
+        // Then overlay dress on top (adjust position & size as needed)
+        const dressX = 60;    // move left/right
+        const dressY = 100;   // move up/down
+        const dressW = 180;   // width
+        const dressH = 250;   // height
+
+        ctx.drawImage(dressImg, dressX, dressY, dressW, dressH);
+      };
+    }
+  </script>
+</body>
+</html>
